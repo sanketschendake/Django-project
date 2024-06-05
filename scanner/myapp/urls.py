@@ -1,10 +1,9 @@
 from django.urls import path
-from django.views.generic import TemplateView
 
 from . import views
 
 urlpatterns = [
-    path('home/', views.home),
+    path('home/', views.home, name='home_url'),
     path('genqr/', views.generate_qr),
-    path('fetch_external_data', views.fetch_external_data),
+    path('fetch_external_data/', views.fetch_external_data),
 ]

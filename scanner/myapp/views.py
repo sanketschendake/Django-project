@@ -2,11 +2,13 @@ import os
 from django.shortcuts import render
 from django.conf import settings
 import qrcode
-from rest_framework.response import Response
-from rest_framework.decorators import api_view
 from requests.auth import HTTPBasicAuth
 import requests
 from django.http import JsonResponse
+
+
+def home(request):
+    return render(request, 'myapp/home.html')
 
 
 def fetch_external_data(request):
@@ -47,22 +49,17 @@ def fetch_external_data(request):
         except requests.exceptions.RequestException as e:
             return JsonResponse({'error': str(e)}, status=500)
 
-        return render(request, 'information.html', {'get_response': get_data, 'post_response': post_data})
+        return render(request, 'myapp/information.html', {'get_response': get_data, 'post_response': post_data})
 
-    # Handle other request methods (if any)
     else:
         return JsonResponse({'error': 'Method not allowed'}, status=405)
 
 
-def home(request):
-    return render(request, 'home.html')
-
-
 def generate_qr(request):
-    data = '1'
+    data = 'MANGOMAZZA200ML'
 
-    qr_code_directory = os.path.join(settings.BASE_DIR, 'scanner', 'myapp', 'templates', 'images')
-
+    # qr_code_directory = os.path.join(settings.BASE_DIR, 'myapp', 'templates', 'images')
+    qr_code_directory = os.path.join('static/img')
     if not os.path.exists(qr_code_directory):
         os.makedirs(qr_code_directory)
 
@@ -83,4 +80,4 @@ def generate_qr(request):
     context = {
         'qr_code_url': 'images/first.png'
     }
-    return render(request, 'qr.html', context)
+    return render(request, 'myapp/qr.html', context)
